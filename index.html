@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	name: <input type="text" id="server"> <br><br>
+	other:<input type="text" id="client"> <br><br>
+
+	<button onclick="action()">join</button>
+
+	<script type="text/javascript">
+		function action(){
+			if((client=document.getElementById("client").value)==""){
+				url="host?user="+document.getElementById("server").value;
+
+			}else{
+				url="join?user="+document.getElementById("server").value+"&to="+client;
+			}
+			window.location.href=url
+
+			
+		}
+	</script>
+
+</body>
+</html>

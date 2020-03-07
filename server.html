@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+  <style type="text/css">
+    h1 {
+  text-align: center;
+}
+td {
+  width: 100px;
+  height: 100px;
+}
+table {
+  margin: 5px auto;
+}
+.vert {
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+}
+.hori {
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+  </style>
+</head>
+<body>
+<H2>YOU ARE: "X"</H2>
+<h1>Tic Tac Toe</h1>
+<table>
+  <tr>
+    <td></td>
+    <td class="vert"></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td class="hori"></td>
+    <td class="vert hori"></td>
+    <td class="hori"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td class="vert"></td>
+    <td></td>
+  </tr>
+</table>
+
+<!--for animation-->
+
+
+
+
+<div id="wtf" style="background-color: rgba(0, 0, 0, 0);bottom: 0;left: 0;position: fixed;right: 0; top: 0;z-index:100;display:none;">
+ </div>
+
+ <div id="wtf01" style="background-color: rgba(1, 1, 1, 0.7);bottom: 0;left: 0;position: fixed;right: 0; top: 0;z-index:1001;display:block">
+
+     <p style="text-align:left ;color:white;font-size:40px;position: absolute;left:30%;top:30%">waiting for player to join... <p>
+  </div>
+
+	<script type="text/javascript">
+    const player="X"
+    element=document.getElementsByTagName('td');
+    for(let i=0;i<element.length;i++){
+      element[i].addEventListener("click",function(){check(player,i);document.getElementById('wtf').style.display="block"
+      });
+
+    };
+
+
+    
+    board=[0,1,2,3,4,5,6,7,8];
+
+    function check(play,position){
+      if(board[position]!=="X" && board[position]!=="O"){
+        board[position]=play;
+        element[position].innerHTML="<h1>{0}</h1>".replace("{0}",play);
+
+      }else{
+        alert("invalid move!!");
+        return;
+      };
+      if(play===player){ws.send(position);};
+      //actual checkibng:
+      if((board[0]==board[1] && board[1]==board[2])||
+         (board[3]==board[4] && board[4]==board[5])||
+         (board[6]==board[7] && board[7]==board[8])||
+         (board[0]==board[3] && board[3]==board[6])||
+         (board[1]==board[4] && board[4]==board[7])||
+         (board[2]==board[5] && board[5]==board[8])||
+         (board[0]==board[4] && board[4]==board[8])||
+         (board[6]==board[2] && board[2]==board[4])){
+        alert("gameover:winner is:   "+play);
+        ws.close();
+      }
+
+    
+     
+        //console.log(board)
+    }
+    const path=document.location;
+    ws=new WebSocket("ws://"+path.host+path.pathname+path.search);
+    ws.onopen=function(){alert("welcome to game!!")};
+
+    ws.onmessage=function(msg){
+      console.log(msg.data)
+      if(msg.data=="joined!!"){document.getElementById("wtf01").style.display="none";return;}
+      check("O",msg.data);
+      document.getElementById('wtf').style.display="none";
+    };
+
+    ws.onclose=function(){alert("server closed!!")};
+    
+
+
+	</script>
+</body>
+</html>
